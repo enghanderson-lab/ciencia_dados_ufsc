@@ -126,6 +126,17 @@ table.datatbl td{padding:6px 10px; border-bottom:1px solid var(--grid);}
 table.datatbl td.num{text-align:right; font-variant-numeric:tabular-nums;}
 
 footer{margin-top:60px; padding-top:20px; border-top:1px solid var(--border); font-size:12px; color:var(--muted);}
+
+.card img{max-width:100%; height:auto; border-radius:8px; display:block;}
+.insight-list.favor .n{ background:rgba(0,131,0,0.14); color:var(--green); }
+.insight-list.contra .n{ background:rgba(227,73,72,0.14); color:var(--red); }
+@media (prefers-color-scheme: dark){
+  .insight-list.favor .n{ background:rgba(0,131,0,0.22); }
+  .insight-list.contra .n{ background:rgba(230,103,103,0.22); }
+}
+:root[data-theme="dark"] .insight-list.favor .n{ background:rgba(0,131,0,0.22); }
+:root[data-theme="dark"] .insight-list.contra .n{ background:rgba(230,103,103,0.22); }
+.callout.bad{ border-left-color:var(--red); }
 </style>
 
 <div class="wrap">
@@ -246,9 +257,111 @@ footer{margin-top:60px; padding-top:20px; border-top:1px solid var(--border); fo
   <div class="plan" id="plan"></div>
 </section>
 
+<section>
+  <h2>8. Teste da tese: saturação estrutural x sazonalidade turística</h2>
+  <p class="section-sub">Estende o diagnóstico acima cruzando os mesmos acidentes (2024–2026) com volume de tráfego (DNIT),
+  frota de veículos (SENATRAN), perfil horário + população residente (Censo 2022), tipo de veículo envolvido e
+  qualidade do pavimento (CNT 2025) — para checar se a saturação do corredor é estrutural (tráfego, frota,
+  pendularidade) ou melhor explicada por turismo de verão. Metodologia e código completos em
+  <code>analysis/analise_viamar.ipynb</code>.</p>
+
+  <div class="stat-row">
+    <div class="stat-tile"><div class="label">VMDa médio no corredor</div><div class="value accent">~42.000</div><div class="sub">veíc/dia (2020 e 2022, estável) · picos acima de 50 mil</div></div>
+    <div class="stat-tile"><div class="label">Frota do corredor</div><div class="value accent">+23,2%</div><div class="sub">1,76M (dez/2020) → 2,17M (dez/2025)</div></div>
+    <div class="stat-tile"><div class="label">Acidentes em horário de pico</div><div class="value accent">33,4%</div><div class="sub">7–8h e 17–19h = 20,8% do dia</div></div>
+    <div class="stat-tile"><div class="label">População do corredor</div><div class="value">2.658.004</div><div class="sub">Censo 2022, 18 municípios</div></div>
+  </div>
+
+  <div class="card">
+    <h3>8.1 · Volume de tráfego (DNIT VMDa) x densidade de acidentes por trecho</h3>
+    <p class="card-note">VMDa 2022 por trecho de km (barras) e densidade de acidentes/km/ano (linha) · correlação e nível de serviço</p>
+    <img src="../output/figs/fig1_vmd_x_acidentes.png" alt="Volume de tráfego x densidade de acidentes por trecho de km">
+    <p>O volume médio diário (VMDa) no corredor é, em média, <strong>~42.000 veículos/dia</strong> tanto em 2020
+    quanto em 2022 (-1,0% em 2 anos — outro platô, como os próprios acidentes), com picos acima de
+    <strong>50.000 veíc/dia</strong> entre Balneário Camboriú–Tijucas e no acesso a Florianópolis (km ~193–210).
+    Mais revelador: o próprio DNIT já classificava, em dezembro/2020, <strong>8 de 30 trechos monitorados</strong>
+    (quase contínuos entre o km 87 e o km 209 — cobrindo o hotspot Itajaí–Balneário Camboriú–Itapema e parte do
+    acesso à Grande Florianópolis) em <strong>Nível de Serviço D</strong> (fluxo próximo da instabilidade/capacidade)
+    — um indicador direto de engenharia de tráfego, de fonte oficial, registrado há pelo menos 5 anos.</p>
+    <div class="callout"><strong>Ressalva:</strong> a correlação direta entre VMDa e densidade de acidentes por trecho é <strong>fraca (r = 0,22)</strong>. O volume agregado por trecho não explica sozinho onde os acidentes se concentram — fatores mais localizados (entroncamentos, pontos de tecelagem, acessos urbanos) parecem pesar mais do que o volume médio do trecho como um todo.</div>
+  </div>
+
+  <div class="card">
+    <h3>8.2 · Frota de veículos (SENATRAN) x crescimento de acidentes</h3>
+    <p class="card-note">Frota por município do corredor, dez/2020 vs dez/2025, e comparação de variação (%) frota x acidentes</p>
+    <img src="../output/figs/fig2_frota_x_acidentes.png" alt="Frota de veículos x crescimento de acidentes">
+    <p>A frota nos 18 municípios do corredor cresceu de <strong>1.760.274 (dez/2020)</strong> para
+    <strong>2.169.015 (dez/2025)</strong> — <strong>+23,2% em 5 anos</strong> (SENATRAN). No único período recente
+    com dado de acidentes comparável (2024→2025, 1 ano), os acidentes no corredor <strong>caíram 1,9%</strong>
+    (3.418 → 3.352).</p>
+    <div class="callout"><strong>Leitura dupla:</strong> é compatível com uma via perto da capacidade, onde mais veículos geram mais congestionamento (velocidades baixas) em vez de mais acidentes por veículo — coerente com o padrão de colisão traseira/lateral já identificado na seção 5. Mas também enfraquece a urgência da tese: se a frota cresce 23% e os acidentes não pioram, o argumento de "crise de segurança que só se resolve com rodovia nova" perde força relativa a intervenções pontuais mais baratas. As janelas temporais das duas séries não coincidem (frota 2020–2025 vs. acidentes 2024–2025) — uma limitação real.</div>
+  </div>
+
+  <div class="card">
+    <h3>8.3 · Perfil horário de pico (pendularidade) + população residente 2022</h3>
+    <p class="card-note">Distribuição horária de acidentes e população residente por município (Censo 2022, IBGE/SIDRA)</p>
+    <img src="../output/figs/fig3_hora_pico_populacao.png" alt="Perfil horário de pico e população residente">
+    <p><strong>33,4%</strong> dos acidentes do corredor ocorrem nas 5 horas de pico de deslocamento casa-trabalho
+    (7–8h e 17–19h) — que representam apenas 20,8% do dia. Os 18 municípios do corredor somam
+    <strong>2.658.004 habitantes</strong> (Censo 2022) — Joinville e Florianópolis sozinhas somam mais de 1 milhão.</p>
+    <div class="callout"><strong>Ressalva:</strong> não foi possível obter a tabela municipal de deslocamento pendular do Censo 2022 via SIDRA (só há tabelas de PNAD Contínua em nível Brasil/UF, ou Censo 2010 — ver <code>dados/README.md</code>). O argumento "é pendularidade, não só turismo" aqui se apoia em <strong>proxies</strong> (horário de pico + população residente), não em fluxo origem-destino direto entre os municípios do corredor.</div>
+  </div>
+
+  <div class="card">
+    <h3>8.4 · Tipo de veículo envolvido (proxy de tráfego de carga)</h3>
+    <p class="card-note">Veículos envolvidos em acidentes no corredor e participação de caminhão/reboque por mês, jan–mai/2026</p>
+    <img src="../output/figs/fig4_tipo_veiculo.png" alt="Tipo de veículo envolvido nos acidentes do corredor">
+    <p>Em 2026 (jan–mai, baixa temporada), <strong>13,7%</strong> dos veículos envolvidos em acidentes no corredor
+    são caminhão/caminhão-trator/semirreboque — atrás de automóvel e motocicleta. A participação é relativamente
+    estável mês a mês (10,9% a 18,2%), sem queda acentuada — mas o período analisado é todo de baixa temporada,
+    então não há como comparar diretamente com dezembro/janeiro de alta temporada com os dados atuais.</p>
+    <div class="callout"><strong>Ressalva:</strong> não foi possível baixar dado bruto e auditável de movimentação portuária da ANTAQ (painel Qlik Sense sem endpoint simples; <code>dados.gov.br</code> retornou 401). Tonelagens por porto catarinense citadas no diagnóstico (São Francisco do Sul ~4,2 Mt/ano, Itapoá ~4,0 Mt/ano, Portonave ~2,5 Mt/ano, Imbituba ~1,7 Mt/ano, Itajaí ~0,9 Mt/ano) vêm de notícias oficiais ANTAQ/SPAF-SC, não de série histórica bruta, e <strong>não entraram em nenhum cálculo</strong> — são contexto, não evidência quantitativa.</div>
+  </div>
+
+  <div class="card">
+    <h3>8.5 · Qualidade do pavimento (CNT 2025) — nível estadual</h3>
+    <p class="card-note">Percentual da malha avaliada como ótimo/bom, Brasil x Santa Catarina</p>
+    <img src="../output/figs/fig5_pavimento_cnt.png" alt="Qualidade do pavimento CNT 2025, Brasil x Santa Catarina">
+    <p>Pela Pesquisa CNT de Rodovias 2025, Santa Catarina tem 16,5% da malha avaliada como "ótimo" e mais 20,3%
+    como "bom" (<strong>36,8% ótimo+bom</strong>) contra 10,1% ótimo e 27,8% bom no Brasil (37,9% ótimo+bom) —
+    SC está essencialmente na média nacional, levemente atrás.</p>
+    <div class="callout"><strong>Ressalva:</strong> o dado da CNT é só por <strong>estado</strong>, não por trecho — não é possível confirmar ou descartar problemas de pavimento especificamente no km 0–215 com este dado. Combinado com o achado da seção 5 (82% dos acidentes já ocorrem em pista dupla/múltipla, não pista simples), não há sinal de que traçado/pavimento ruim seja um fator concorrente relevante.</div>
+  </div>
+</section>
+
+<section>
+  <h2>9. Veredito</h2>
+  <p class="section-sub">Os dados coletados sustentam <strong>moderadamente</strong> a tese de saturação estrutural de capacidade, com ressalvas relevantes que qualquer EIA/RIMA precisará endereçar.</p>
+  <div class="grid-2">
+    <div class="card">
+      <h3>A favor</h3>
+      <ul class="insight-list favor">
+        <li><span class="n">✓</span><span>Volume de tráfego alto e estável (~42 mil veíc/dia em média, picos acima de 50 mil) — mesmo platô temporal que os acidentes, não uma tendência recente.</span></li>
+        <li><span class="n">✓</span><span>Nível de Serviço D já registrado pelo DNIT em 2020 em quase toda a extensão do hotspot Itajaí–Balneário Camboriú–Itapema — indicador direto de proximidade da capacidade, de fonte oficial.</span></li>
+        <li><span class="n">✓</span><span>Frota cresceu 23% em 5 anos — pressão de demanda real e crescente sobre a via.</span></li>
+        <li><span class="n">✓</span><span>Corredor concentra 2,66 milhões de habitantes e 1/3 dos acidentes ocorre em horário de pico de deslocamento (proxy de pendularidade).</span></li>
+        <li><span class="n">✓</span><span>Pavimento e traçado (82% pista dupla/múltipla) não aparecem como fator concorrente relevante — reforça mecanismo de volume/capacidade, não infraestrutura malfeita.</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Contra / limitações</h3>
+      <ul class="insight-list contra">
+        <li><span class="n">✕</span><span>Correlação direta entre volume por trecho e densidade de acidentes é fraca (r = 0,22) — reduzir volume não necessariamente resolve os pontos mais críticos, se dominados por geometria/entroncamentos locais.</span></li>
+        <li><span class="n">✕</span><span>Acidentes não cresceram junto com a frota (+23% frota vs. -1,9% acidentes no único ano comparável) — dá margem ao argumento de que o corredor está "aguentando" o crescimento, o que enfraquece a urgência de uma rodovia nova de R$ 7–9,6 bi frente a intervenções pontuais mais baratas.</span></li>
+        <li><span class="n">✕</span><span>Não foi possível obter dado bruto de pendularidade municipal (Censo 2022/SIDRA) nem de movimentação de carga portuária (ANTAQ) — dois pilares centrais da tese ficam apoiados em proxies e números de imprensa, não em séries primárias.</span></li>
+        <li><span class="n">✕</span><span>Toda a análise é observacional/cross-sectional: não estabelece causalidade entre volume/capacidade e acidentes. Congestionamento também pode ser autolimitante (velocidades baixas reduzem severidade).</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout bad"><strong>Recomendação:</strong> os elementos aqui já justificam um estudo de capacidade formal (matriz origem-destino, projeção de desvio de tráfego por segmento), mas não fecham o caso sozinhos. Prioridades para fortalecer (ou refutar) a tese: (1) série mensal de nível de serviço da concessionária Arteris Litoral Sul além de 2020 — o relatório baixado neste projeto era, na verdade, de obras de 2015, não de tráfego atual; (2) microdados do Censo 2022 (via Base dos Dados/BigQuery) para pendularidade município a município; (3) série ANTAQ auditável por porto, para testar a hipótese de tráfego de carga fora de temporada de forma quantitativa.</div>
+</section>
+
 <footer>
   Fonte: Polícia Rodoviária Federal (PRF), arquivos datatran2024.csv, datatran2025.csv, datatran2026.csv,
   acidentes2026.csv e acidentes2026_todas_causas_tipos.csv, período 01/01/2024–31/05/2026 (2026 parcial).
+  Seção 8–9: volume de tráfego DNIT/PNCT (vmda2022_snv_202301b, contagem_trafego_2020), frota SENATRAN
+  (frota-dezembro2020, FrotaporMunicipioetipoDEZEMBRO2025), população IBGE Censo 2022 (populacao_corredor),
+  pavimento CNT 2025 (cnt_pesquisa_rodovias_2025). Detalhes e limitações de cada fonte em <code>dados/README.md</code>.
   Corredor Joinville–Florianópolis definido como BR-101/SC, municípios de Garuvá a Palhoça (km 0–215).
   Análise exploratória — não constitui estudo de viabilidade ou avaliação de impacto ambiental.
 </footer>

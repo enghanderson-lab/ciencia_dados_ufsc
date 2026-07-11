@@ -1,0 +1,455 @@
+<title>BR-101 Curitiba–Florianópolis: Diagnóstico para o Estudo de Impacto da ViaMar</title>
+<style>
+:root{
+  --surface-1:#fcfcfb; --page:#f9f9f7; --text-primary:#0b0b0b; --text-secondary:#52514e;
+  --muted:#898781; --grid:#e1e0d9; --baseline:#c3c2b7; --border:rgba(11,11,11,0.10);
+  --blue:#2a78d6; --aqua:#1baf7a; --yellow:#eda100; --green:#008300; --violet:#4a3aa7;
+  --red:#e34948; --magenta:#e87ba4; --orange:#eb6834;
+  --blue-100:#cde2fb; --blue-300:#6da7ec;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --surface-1:#1a1a19; --page:#0d0d0d; --text-primary:#ffffff; --text-secondary:#c3c2b7;
+    --muted:#898781; --grid:#2c2c2a; --baseline:#383835; --border:rgba(255,255,255,0.10);
+    --blue:#3987e5; --aqua:#199e70; --yellow:#c98500; --green:#008300; --violet:#9085e9;
+    --red:#e66767; --magenta:#d55181; --orange:#d95926;
+  }
+}
+:root[data-theme="dark"]{
+  --surface-1:#1a1a19; --page:#0d0d0d; --text-primary:#ffffff; --text-secondary:#c3c2b7;
+  --muted:#898781; --grid:#2c2c2a; --baseline:#383835; --border:rgba(255,255,255,0.10);
+  --blue:#3987e5; --aqua:#199e70; --yellow:#c98500; --green:#008300; --violet:#9085e9;
+  --red:#e66767; --magenta:#d55181; --orange:#d95926;
+}
+:root[data-theme="light"]{
+  --surface-1:#fcfcfb; --page:#f9f9f7; --text-primary:#0b0b0b; --text-secondary:#52514e;
+  --muted:#898781; --grid:#e1e0d9; --baseline:#c3c2b7; --border:rgba(11,11,11,0.10);
+  --blue:#2a78d6; --aqua:#1baf7a; --yellow:#eda100; --green:#008300; --violet:#4a3aa7;
+  --red:#e34948; --magenta:#e87ba4; --orange:#eb6834;
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--page); color:var(--text-primary);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  line-height:1.5;
+}
+.wrap{max-width:1080px; margin:0 auto; padding:32px 20px 80px;}
+
+header.hero{padding:8px 0 28px;}
+header.hero .kicker{
+  font-size:13px; font-weight:600; color:var(--red); text-transform:uppercase;
+  letter-spacing:.04em; margin:0 0 8px;
+}
+header.hero h1{font-size:clamp(26px,4vw,38px); margin:0 0 10px; letter-spacing:-0.01em;}
+header.hero p.lede{font-size:16px; color:var(--text-secondary); max-width:760px; margin:0;}
+
+.stat-row{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin:28px 0 8px;
+}
+.stat-tile{
+  background:var(--surface-1); border:1px solid var(--border); border-radius:10px; padding:16px 18px;
+}
+.stat-tile .label{font-size:12.5px; color:var(--text-secondary); margin-bottom:6px;}
+.stat-tile .value{font-size:26px; font-weight:600; letter-spacing:-0.01em;}
+.stat-tile .value.accent{color:var(--red);}
+.stat-tile .sub{font-size:12px; color:var(--muted); margin-top:4px;}
+
+section{margin:52px 0;}
+section h2{
+  font-size:20px; margin:0 0 4px; letter-spacing:-0.01em;
+}
+section .section-sub{font-size:14px; color:var(--text-secondary); margin:0 0 20px; max-width:760px;}
+
+.card{
+  background:var(--surface-1); border:1px solid var(--border); border-radius:12px;
+  padding:20px 20px 12px; margin-bottom:20px; overflow-x:auto;
+}
+.card h3{font-size:14.5px; margin:0 0 2px; font-weight:600;}
+.card .card-note{font-size:12px; color:var(--muted); margin:0 0 14px;}
+
+.grid-2{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+@media (max-width:760px){.grid-2{grid-template-columns:1fr;}}
+
+svg{display:block; max-width:100%; height:auto;}
+.axis-label{font-size:11px; fill:var(--muted); font-family:system-ui,sans-serif;}
+.bar-label{font-size:11.5px; fill:var(--text-secondary);}
+.bar-value{font-size:11.5px; fill:var(--text-primary); font-weight:600;}
+.gridline{stroke:var(--grid); stroke-width:1;}
+.baseline{stroke:var(--baseline); stroke-width:1;}
+
+.legend{display:flex; gap:16px; flex-wrap:wrap; font-size:12.5px; color:var(--text-secondary); margin-bottom:10px;}
+.legend .item{display:flex; align-items:center; gap:6px;}
+.legend .swatch{width:10px; height:10px; border-radius:2px; display:inline-block;}
+
+.insight-list{display:grid; gap:12px; margin:0; padding:0; list-style:none;}
+.insight-list li{
+  background:var(--surface-1); border:1px solid var(--border); border-radius:10px;
+  padding:14px 16px; font-size:14.5px; display:flex; gap:12px; align-items:flex-start;
+}
+.insight-list .n{
+  flex:0 0 auto; width:22px; height:22px; border-radius:50%; background:var(--blue-100);
+  color:var(--blue); font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center;
+}
+:root[data-theme="dark"] .insight-list .n, :root:not([data-theme="light"]) .insight-list .n{ }
+@media (prefers-color-scheme: dark){ .insight-list .n{ background:rgba(57,135,229,0.18); } }
+:root[data-theme="dark"] .insight-list .n{ background:rgba(57,135,229,0.18); }
+
+.plan{counter-reset:step; display:grid; gap:16px;}
+.plan .step{
+  position:relative; background:var(--surface-1); border:1px solid var(--border); border-radius:12px;
+  padding:18px 20px 18px 60px;
+}
+.plan .step::before{
+  counter-increment:step; content:counter(step);
+  position:absolute; left:18px; top:18px; width:28px; height:28px; border-radius:50%;
+  background:var(--red); color:#fff; font-weight:700; font-size:13px;
+  display:flex; align-items:center; justify-content:center;
+}
+.plan .step h4{margin:0 0 6px; font-size:15.5px;}
+.plan .step p{margin:0 0 8px; font-size:14px; color:var(--text-secondary);}
+.plan .step ul{margin:6px 0 0; padding-left:18px; font-size:13.5px; color:var(--text-secondary);}
+.plan .step .tag{
+  display:inline-block; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.03em;
+  color:var(--muted); border:1px solid var(--border); border-radius:20px; padding:2px 9px; margin-bottom:8px;
+}
+
+.callout{
+  border-left:3px solid var(--yellow); background:var(--surface-1); border-radius:0 10px 10px 0;
+  padding:14px 18px; font-size:14px; color:var(--text-secondary);
+}
+.callout strong{color:var(--text-primary);}
+
+table.datatbl{border-collapse:collapse; width:100%; font-size:13.5px;}
+table.datatbl th{text-align:left; color:var(--muted); font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.02em; padding:6px 10px; border-bottom:1px solid var(--grid);}
+table.datatbl td{padding:6px 10px; border-bottom:1px solid var(--grid);}
+table.datatbl td.num{text-align:right; font-variant-numeric:tabular-nums;}
+
+footer{margin-top:60px; padding-top:20px; border-top:1px solid var(--border); font-size:12px; color:var(--muted);}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <p class="kicker">Análise exploratória · Dados PRF (jan–mai/2026)</p>
+  <h1>BR-101 no trecho Joinville–Florianópolis: onde a ViaMar vai atuar</h1>
+  <p class="lede">Levantamento da estrutura das bases de acidentes da Polícia Rodoviária Federal, com foco no
+  corredor que a futura rodovia ViaMar (Joinville–Florianópolis) deve impactar, e um plano passo a passo para o
+  estudo de impacto.</p>
+</header>
+
+<div class="stat-row" id="stat-tiles"></div>
+
+<section>
+  <h2>1. Estrutura dos dados</h2>
+  <p class="section-sub">Três arquivos abertos da PRF, granularidades diferentes do mesmo universo de acidentes.</p>
+  <div class="card">
+    <table class="datatbl">
+      <thead><tr><th>Arquivo</th><th>Granularidade</th><th class="num">Linhas</th><th>Período</th><th>Observação</th></tr></thead>
+      <tbody>
+        <tr><td>datatran2026.csv</td><td>1 linha = 1 acidente</td><td class="num">29.774</td><td>01/01–31/05/2026</td><td>Base principal para contagens e severidade agregada</td></tr>
+        <tr><td>acidentes2026.csv</td><td>1 linha = 1 pessoa envolvida</td><td class="num">80.873</td><td>01/01–31/05/2026</td><td>Mesmos 29.774 acidentes, detalhado por pessoa/veículo</td></tr>
+        <tr><td>acidentes2026_todas_causas_tipos.csv</td><td>1 linha = 1 causa/tipo por envolvido</td><td class="num">249.250</td><td>01/01–31/05/2026</td><td>Multicausalidade (um acidente pode ter várias causas e tipos)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout"><strong>Atenção de escopo:</strong> os três arquivos cobrem <strong>jan–mai/2026</strong> (5 meses), não o ano completo — o nome "2026" indica o ano de referência, não o período coberto. Isso significa que ainda não captamos a temporada de verão de dez/jan seguinte nem o efeito de safras/eventos do 2º semestre. Séries históricas (anos anteriores) do <a href="https://www.gov.br/prf/pt-br/acesso-a-informacao/dados-abertos/dados-abertos-da-prf" target="_blank" style="color:inherit">portal de dados abertos da PRF</a> ajudariam a completar sazonalidade.</div>
+</section>
+
+<section>
+  <h2>2. Panorama nacional: por que a BR-101/SC é o ponto certo para olhar</h2>
+  <p class="section-sub">A BR-101 é, isoladamente, a rodovia federal com mais acidentes registrados no país — e Santa Catarina é o estado que mais concentra ocorrências dentro dela.</p>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Ranking nacional de rodovias por nº de acidentes</h3>
+      <p class="card-note">Top 10 BRs, jan–mai/2026</p>
+      <div id="chart-br-rank"></div>
+    </div>
+    <div class="card">
+      <h3>BR-101: acidentes por estado</h3>
+      <p class="card-note">SC concentra mais acidentes na BR-101 do que qualquer outro estado</p>
+      <div id="chart-uf-rank"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>3. O corredor Joinville–Florianópolis concentra o problema dentro do próprio SC</h2>
+  <p class="section-sub">Definindo o corredor como os municípios de Garuvá a Palhoça (km 0 a ~215 da BR-101/SC) — o trajeto que a ViaMar deve substituir/complementar.</p>
+  <div class="stat-row" id="corridor-stats"></div>
+  <div class="card">
+    <h3>Densidade de acidentes ao longo da rodovia (blocos de 10 km)</h3>
+    <p class="card-note">Km 0 = divisa PR/SC (Garuvá) · Km ~215 = acesso a Florianópolis (São José/Palhoça)</p>
+    <div id="chart-km-hist"></div>
+  </div>
+  <div class="card">
+    <h3>Acidentes por município no corredor</h3>
+    <p class="card-note">jan–mai/2026 · ordenado por volume</p>
+    <div id="chart-municipios"></div>
+  </div>
+</section>
+
+<section>
+  <h2>4. Quando e por que os acidentes acontecem</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Acidentes por hora do dia</h3>
+      <p class="card-note">Picos às 7–8h e 17–19h: perfil de deslocamento pendular, não só turístico</p>
+      <div id="chart-hora"></div>
+    </div>
+    <div class="card">
+      <h3>Acidentes por dia da semana</h3>
+      <p class="card-note">Sexta e fim de semana concentram mais ocorrências</p>
+      <div id="chart-dia"></div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Principais causas registradas</h3>
+      <div id="chart-causa"></div>
+    </div>
+    <div class="card">
+      <h3>Principais tipos de acidente</h3>
+      <div id="chart-tipo"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>5. Insights principais</h2>
+  <ul class="insight-list" id="insights"></ul>
+</section>
+
+<section>
+  <h2>6. Plano de ação passo a passo — estudo de impacto da ViaMar</h2>
+  <p class="section-sub">Sequência sugerida para transformar este diagnóstico em uma avaliação de impacto robusta do novo eixo Joinville–Florianópolis.</p>
+  <div class="plan" id="plan"></div>
+</section>
+
+<footer>
+  Fonte: Polícia Rodoviária Federal (PRF), arquivos datatran2026.csv, acidentes2026.csv e
+  acidentes2026_todas_causas_tipos.csv, período 01/01/2026–31/05/2026. Corredor Joinville–Florianópolis definido
+  como BR-101/SC, municípios de Garuvá a Palhoça (km 0–215). Análise exploratória — não constitui estudo de
+  viabilidade ou avaliação de impacto ambiental.
+</footer>
+
+</div>
+
+<script>
+const DATA = {"br_rank": [{"br": "BR-101", "acidentes": 5328}, {"br": "BR-116", "acidentes": 4336}, {"br": "BR-381", "acidentes": 1435}, {"br": "BR-40", "acidentes": 1396}, {"br": "BR-153", "acidentes": 1175}, {"br": "BR-364", "acidentes": 1125}, {"br": "BR-163", "acidentes": 1028}, {"br": "BR-277", "acidentes": 940}, {"br": "BR-376", "acidentes": 822}, {"br": "BR-262", "acidentes": 683}], "br101_uf": [{"uf": "SC", "acidentes": 1734, "mortos": 54}, {"uf": "RJ", "acidentes": 1034, "mortos": 51}, {"uf": "ES", "acidentes": 764, "mortos": 48}, {"uf": "PE", "acidentes": 577, "mortos": 39}, {"uf": "BA", "acidentes": 364, "mortos": 60}, {"uf": "RN", "acidentes": 246, "mortos": 8}, {"uf": "PB", "acidentes": 180, "mortos": 9}, {"uf": "SE", "acidentes": 151, "mortos": 11}, {"uf": "AL", "acidentes": 116, "mortos": 16}, {"uf": "SP", "acidentes": 113, "mortos": 1}, {"uf": "RS", "acidentes": 49, "mortos": 4}], "corredor_municipios": [{"municipio": "São José", "acidentes": 286, "mortos": 5, "feridos_graves": 54}, {"municipio": "Palhoça", "acidentes": 194, "mortos": 8, "feridos_graves": 45}, {"municipio": "Itajaí", "acidentes": 148, "mortos": 10, "feridos_graves": 36}, {"municipio": "Joinville", "acidentes": 137, "mortos": 5, "feridos_graves": 13}, {"municipio": "Itapema", "acidentes": 126, "mortos": 3, "feridos_graves": 27}, {"municipio": "Bal. Camboriú", "acidentes": 123, "mortos": 1, "feridos_graves": 28}, {"municipio": "Biguaçu", "acidentes": 113, "mortos": 3, "feridos_graves": 22}, {"municipio": "Araquari", "acidentes": 47, "mortos": 1, "feridos_graves": 8}, {"municipio": "Barra Velha", "acidentes": 47, "mortos": 3, "feridos_graves": 5}, {"municipio": "Porto Belo", "acidentes": 47, "mortos": 0, "feridos_graves": 6}, {"municipio": "Bal. Piçarras", "acidentes": 44, "mortos": 2, "feridos_graves": 17}, {"municipio": "Camboriú", "acidentes": 40, "mortos": 1, "feridos_graves": 12}, {"municipio": "Garuvá", "acidentes": 31, "mortos": 0, "feridos_graves": 5}, {"municipio": "Penha", "acidentes": 24, "mortos": 0, "feridos_graves": 3}, {"municipio": "Tijucas", "acidentes": 23, "mortos": 1, "feridos_graves": 9}, {"municipio": "Gov. Celso Ramos", "acidentes": 8, "mortos": 0, "feridos_graves": 4}, {"municipio": "Florianópolis", "acidentes": 7, "mortos": 0, "feridos_graves": 0}, {"municipio": "Navegantes", "acidentes": 7, "mortos": 0, "feridos_graves": 4}], "km_hist": [{"km_ini": 0, "km_fim": 10, "acidentes": 22}, {"km_ini": 10, "km_fim": 20, "acidentes": 23}, {"km_ini": 20, "km_fim": 30, "acidentes": 38}, {"km_ini": 30, "km_fim": 40, "acidentes": 45}, {"km_ini": 40, "km_fim": 50, "acidentes": 58}, {"km_ini": 50, "km_fim": 60, "acidentes": 28}, {"km_ini": 60, "km_fim": 70, "acidentes": 13}, {"km_ini": 70, "km_fim": 80, "acidentes": 23}, {"km_ini": 80, "km_fim": 90, "acidentes": 25}, {"km_ini": 90, "km_fim": 100, "acidentes": 44}, {"km_ini": 100, "km_fim": 110, "acidentes": 44}, {"km_ini": 110, "km_fim": 120, "acidentes": 92}, {"km_ini": 120, "km_fim": 130, "acidentes": 94}, {"km_ini": 130, "km_fim": 140, "acidentes": 132}, {"km_ini": 140, "km_fim": 150, "acidentes": 115}, {"km_ini": 150, "km_fim": 160, "acidentes": 60}, {"km_ini": 160, "km_fim": 170, "acidentes": 21}, {"km_ini": 170, "km_fim": 180, "acidentes": 12}, {"km_ini": 180, "km_fim": 190, "acidentes": 25}, {"km_ini": 190, "km_fim": 200, "acidentes": 97}, {"km_ini": 200, "km_fim": 210, "acidentes": 252}, {"km_ini": 210, "km_fim": 220, "acidentes": 127}, {"km_ini": 220, "km_fim": 230, "acidentes": 32}], "corredor_vs_resto": {"corredor": {"acidentes": 1452, "mortos": 43, "feridos_graves": 298, "taxa_mortos": 0.0296, "pct_com_fatais": 2.69}, "resto_br101_sc": {"acidentes": 282, "mortos": 11, "feridos_graves": 80, "taxa_mortos": 0.039, "pct_com_fatais": 3.55}}, "corredor_km_extensao": 215, "resto_km_extensao": 248, "hora": [{"hora": 0, "acidentes": 40}, {"hora": 1, "acidentes": 22}, {"hora": 2, "acidentes": 35}, {"hora": 3, "acidentes": 30}, {"hora": 4, "acidentes": 29}, {"hora": 5, "acidentes": 40}, {"hora": 6, "acidentes": 57}, {"hora": 7, "acidentes": 106}, {"hora": 8, "acidentes": 86}, {"hora": 9, "acidentes": 63}, {"hora": 10, "acidentes": 74}, {"hora": 11, "acidentes": 65}, {"hora": 12, "acidentes": 66}, {"hora": 13, "acidentes": 64}, {"hora": 14, "acidentes": 58}, {"hora": 15, "acidentes": 68}, {"hora": 16, "acidentes": 73}, {"hora": 17, "acidentes": 88}, {"hora": 18, "acidentes": 105}, {"hora": 19, "acidentes": 82}, {"hora": 20, "acidentes": 66}, {"hora": 21, "acidentes": 41}, {"hora": 22, "acidentes": 37}, {"hora": 23, "acidentes": 57}], "dia_semana": [{"dia": "Seg", "acidentes": 187}, {"dia": "Ter", "acidentes": 179}, {"dia": "Qua", "acidentes": 193}, {"dia": "Qui", "acidentes": 184}, {"dia": "Sex", "acidentes": 257}, {"dia": "Sáb", "acidentes": 247}, {"dia": "Dom", "acidentes": 205}], "tipo_acidente": [{"tipo": "Colisão traseira", "acidentes": 401}, {"tipo": "Colisão lateral mesmo sentido", "acidentes": 324}, {"tipo": "Tombamento", "acidentes": 166}, {"tipo": "Colisão com objeto", "acidentes": 146}, {"tipo": "Saída de leito carroçável", "acidentes": 102}, {"tipo": "Colisão transversal", "acidentes": 98}, {"tipo": "Queda de ocupante de veículo", "acidentes": 73}, {"tipo": "Atropelamento de pedestre", "acidentes": 36}], "causa_acidente": [{"causa": "Reação tardia ou ineficiente do condutor", "acidentes": 272}, {"causa": "Ausência de reação do condutor", "acidentes": 227}, {"causa": "Manobra de mudança de faixa", "acidentes": 163}, {"causa": "Condutor deixou de manter distância do veículo da frente", "acidentes": 136}, {"causa": "Moto entre faixas", "acidentes": 92}, {"causa": "Ingestão de álcool pelo condutor", "acidentes": 89}, {"causa": "Acessar a via sem observar a presença dos outros veículos", "acidentes": 87}, {"causa": "Demais falhas mecânicas ou elétricas", "acidentes": 56}], "mensal": [{"mes": "2026-01", "acidentes": 320}, {"mes": "2026-02", "acidentes": 270}, {"mes": "2026-03", "acidentes": 301}, {"mes": "2026-04", "acidentes": 288}, {"mes": "2026-05", "acidentes": 273}], "tipo_pista": [{"tipo": "Dupla (duplicada)", "acidentes": 782}, {"tipo": "Múltipla", "acidentes": 537}, {"tipo": "Simples (pista única)", "acidentes": 133}], "tipo_veiculo": [{"tipo": "Automóvel", "n": 1150}, {"tipo": "Motocicleta", "n": 986}, {"tipo": "Caminhonete", "n": 217}, {"tipo": "Motoneta", "n": 187}, {"tipo": "Semirreboque (carreta)", "n": 157}, {"tipo": "Caminhão-trator", "n": 150}, {"tipo": "Caminhão", "n": 143}, {"tipo": "Camioneta", "n": 103}], "meta": {"periodo": "01/01/2026 a 31/05/2026", "total_nacional_acidentes": 29774, "total_br101": 5328, "total_br101_sc": 1734, "total_corredor": 1452, "total_resto_sc": 282}};
+
+function fmt(n){ return n.toLocaleString('pt-BR'); }
+
+function svgEl(tag, attrs){
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for(const k in attrs) el.setAttribute(k, attrs[k]);
+  return el;
+}
+
+// Horizontal bar chart
+function hBarChart(container, data, {labelKey, valueKey, highlightKey=null, highlightColor='var(--red)', color='var(--blue)', width=480, unit=''}){
+  const barH = 22, gap = 10, leftPad = 132, rightPad = 54, topPad = 6;
+  const n = data.length;
+  const height = n*(barH+gap) - gap + topPad + 6;
+  const maxV = Math.max(...data.map(d=>d[valueKey]));
+  const plotW = width - leftPad - rightPad;
+  const svg = svgEl('svg', {viewBox:`0 0 ${width} ${height}`, width:'100%'});
+  data.forEach((d,i)=>{
+    const y = topPad + i*(barH+gap);
+    const w = Math.max(2, (d[valueKey]/maxV)*plotW);
+    const isHi = highlightKey && d[highlightKey];
+    const label = svgEl('text', {x:leftPad-10, y:y+barH*0.68, 'text-anchor':'end', class:'bar-label'});
+    label.textContent = d[labelKey];
+    svg.appendChild(label);
+    const rect = svgEl('rect', {x:leftPad, y, width:w, height:barH, rx:4, fill: isHi?highlightColor:color});
+    svg.appendChild(rect);
+    const val = svgEl('text', {x:leftPad+w+8, y:y+barH*0.68, class:'bar-value'});
+    val.textContent = fmt(d[valueKey]) + unit;
+    svg.appendChild(val);
+  });
+  container.appendChild(svg);
+}
+
+// Vertical column chart (for km histogram / hours)
+function colChart(container, data, {labelKey, valueKey, width=1000, height=220, highlightIdx=[], color='var(--blue)', highlightColor='var(--red)', everyNthLabel=1, rotateLabels=false}){
+  const leftPad=44, rightPad=8, topPad=10, botPad = rotateLabels?46:26;
+  const plotW = width-leftPad-rightPad, plotH = height-topPad-botPad;
+  const n = data.length;
+  const maxV = Math.max(...data.map(d=>d[valueKey]));
+  const bw = plotW/n;
+  const svg = svgEl('svg', {viewBox:`0 0 ${width} ${height}`, width:'100%'});
+  // gridlines (4 steps)
+  const steps=4;
+  for(let s=0;s<=steps;s++){
+    const val = Math.round(maxV*s/steps/10)*10;
+    const y = topPad + plotH - (val/maxV)*plotH;
+    svg.appendChild(svgEl('line', {x1:leftPad, x2:width-rightPad, y1:y, y2:y, class:'gridline'}));
+    const t = svgEl('text', {x:leftPad-8, y:y+4, 'text-anchor':'end', class:'axis-label'});
+    t.textContent = fmt(val);
+    svg.appendChild(t);
+  }
+  data.forEach((d,i)=>{
+    const x = leftPad + i*bw;
+    const h = (d[valueKey]/maxV)*plotH;
+    const y = topPad+plotH-h;
+    const isHi = highlightIdx.includes(i);
+    const barWpx = Math.max(2, bw-2);
+    svg.appendChild(svgEl('rect', {x:x+1, y, width:barWpx, height:h, rx:3, fill:isHi?highlightColor:color}));
+    if(i%everyNthLabel===0){
+      const t = svgEl('text', {x:x+bw/2, y:topPad+plotH+16, 'text-anchor':'middle', class:'axis-label'});
+      t.textContent = d[labelKey];
+      if(rotateLabels) t.setAttribute('transform', `rotate(-45 ${x+bw/2} ${topPad+plotH+16})`);
+      if(rotateLabels) t.setAttribute('text-anchor','end');
+      svg.appendChild(t);
+    }
+  });
+  svg.appendChild(svgEl('line', {x1:leftPad, x2:width-rightPad, y1:topPad+plotH, y2:topPad+plotH, class:'baseline'}));
+  container.appendChild(svg);
+}
+
+// Line chart with area fill (hourly profile)
+function lineChart(container, data, {labelKey, valueKey, width=480, height=200, color='var(--blue)', markIdx=[]}){
+  const leftPad=40, rightPad=14, topPad=10, botPad=26;
+  const plotW=width-leftPad-rightPad, plotH=height-topPad-botPad;
+  const n=data.length;
+  const maxV=Math.max(...data.map(d=>d[valueKey]));
+  const stepX = plotW/(n-1);
+  const pts = data.map((d,i)=>[leftPad+i*stepX, topPad+plotH-(d[valueKey]/maxV)*plotH]);
+  const svg = svgEl('svg', {viewBox:`0 0 ${width} ${height}`, width:'100%'});
+  const steps=4;
+  for(let s=0;s<=steps;s++){
+    const val = Math.round(maxV*s/steps);
+    const y = topPad+plotH-(val/maxV)*plotH;
+    svg.appendChild(svgEl('line', {x1:leftPad, x2:width-rightPad, y1:y, y2:y, class:'gridline'}));
+    const t = svgEl('text', {x:leftPad-8, y:y+4, 'text-anchor':'end', class:'axis-label'});
+    t.textContent = fmt(val);
+    svg.appendChild(t);
+  }
+  const areaPath = 'M'+pts.map(p=>p.join(',')).join('L')+`L${pts[n-1][0]},${topPad+plotH}L${pts[0][0]},${topPad+plotH}Z`;
+  svg.appendChild(svgEl('path', {d:areaPath, fill:color, opacity:0.1, stroke:'none'}));
+  const linePath = 'M'+pts.map(p=>p.join(',')).join('L');
+  svg.appendChild(svgEl('path', {d:linePath, fill:'none', stroke:color, 'stroke-width':2, 'stroke-linejoin':'round', 'stroke-linecap':'round'}));
+  markIdx.forEach(i=>{
+    svg.appendChild(svgEl('circle', {cx:pts[i][0], cy:pts[i][1], r:5, fill:color, stroke:'var(--surface-1)', 'stroke-width':2}));
+  });
+  data.forEach((d,i)=>{
+    if(i%3===0){
+      const t = svgEl('text', {x:leftPad+i*stepX, y:topPad+plotH+16, 'text-anchor':'middle', class:'axis-label'});
+      t.textContent = d[labelKey]+'h';
+      svg.appendChild(t);
+    }
+  });
+  svg.appendChild(svgEl('line', {x1:leftPad, x2:width-rightPad, y1:topPad+plotH, y2:topPad+plotH, class:'baseline'}));
+  container.appendChild(svg);
+}
+
+// ---- Stat tiles (hero) ----
+const heroStats = [
+  {label:'Acidentes no Brasil (5 meses)', value: fmt(DATA.meta.total_nacional_acidentes), sub:'jan–mai/2026 · todas as BRs'},
+  {label:'Acidentes na BR-101', value: fmt(DATA.meta.total_br101), sub:'#1 rodovia federal em acidentes', accent:true},
+  {label:'Acidentes na BR-101/SC', value: fmt(DATA.meta.total_br101_sc), sub:'estado líder dentro da BR-101', accent:true},
+  {label:'No corredor Joinville–Floripa', value: fmt(DATA.meta.total_corredor), sub: Math.round(DATA.meta.total_corredor/DATA.meta.total_br101_sc*100)+'% dos acidentes da BR-101/SC', accent:true},
+];
+const statRow = document.getElementById('stat-tiles');
+heroStats.forEach(s=>{
+  const div = document.createElement('div'); div.className='stat-tile';
+  div.innerHTML = `<div class="label">${s.label}</div><div class="value${s.accent?' accent':''}">${s.value}</div><div class="sub">${s.sub}</div>`;
+  statRow.appendChild(div);
+});
+
+// ---- corridor vs resto stats ----
+const c = DATA.corredor_vs_resto.corredor, r = DATA.corredor_vs_resto.resto_br101_sc;
+const cKm = DATA.corredor_km_extensao, rKm = DATA.resto_km_extensao;
+const corridorStats = [
+  {label:'Densidade — corredor (acid./km, 5 meses)', value:(c.acidentes/cKm).toFixed(1)},
+  {label:'Densidade — restante BR-101/SC (acid./km)', value:(r.acidentes/rKm).toFixed(1)},
+  {label:'Vítimas fatais — corredor', value: c.mortos + ' ('+c.pct_com_fatais+'% dos acidentes)'},
+  {label:'Feridos graves — corredor', value: fmt(c.feridos_graves)},
+];
+const csRow = document.getElementById('corridor-stats');
+corridorStats.forEach(s=>{
+  const div = document.createElement('div'); div.className='stat-tile';
+  div.innerHTML = `<div class="label">${s.label}</div><div class="value">${s.value}</div>`;
+  csRow.appendChild(div);
+});
+
+// ---- Charts ----
+hBarChart(document.getElementById('chart-br-rank'),
+  DATA.br_rank.map(d=>({...d, hi: d.br==='BR-101'})),
+  {labelKey:'br', valueKey:'acidentes', highlightKey:'hi'});
+
+hBarChart(document.getElementById('chart-uf-rank'),
+  DATA.br101_uf.map(d=>({...d, hi: d.uf==='SC'})),
+  {labelKey:'uf', valueKey:'acidentes', highlightKey:'hi'});
+
+const kmHist = DATA.km_hist.map(d=>({label:d.km_ini+'', acidentes:d.acidentes}));
+const hiIdx = DATA.km_hist.map((d,i)=> (d.km_ini>=190 ? i : (d.km_ini>=110&&d.km_ini<160?i:null))).filter(x=>x!==null);
+colChart(document.getElementById('chart-km-hist'), kmHist, {labelKey:'label', valueKey:'acidentes', width:1000, height:230, highlightIdx:hiIdx, everyNthLabel:2});
+
+hBarChart(document.getElementById('chart-municipios'), DATA.corredor_municipios, {labelKey:'municipio', valueKey:'acidentes', width:920});
+
+lineChart(document.getElementById('chart-hora'), DATA.hora, {labelKey:'hora', valueKey:'acidentes', markIdx:[7,18]});
+
+colChart(document.getElementById('chart-dia'), DATA.dia_semana, {labelKey:'dia', valueKey:'acidentes', width:480, height:200});
+
+hBarChart(document.getElementById('chart-causa'), DATA.causa_acidente, {labelKey:'causa', valueKey:'acidentes', width:460});
+hBarChart(document.getElementById('chart-tipo'), DATA.tipo_acidente, {labelKey:'tipo', valueKey:'acidentes', width:460});
+
+// ---- Insights ----
+const insights = [
+  `A <strong>BR-101 é a rodovia federal com mais acidentes do Brasil</strong> (5.328 em 5 meses, à frente da BR-116 com 4.336), e <strong>Santa Catarina é o estado que mais concentra acidentes dentro da BR-101</strong> (1.734, mais que Rio de Janeiro e Espírito Santo somados de perto).`,
+  `Dentro da BR-101/SC, <strong>83,7% dos acidentes (1.452 de 1.734) ocorrem no trecho Garuvá–Palhoça</strong> — exatamente o corredor que a ViaMar vai atravessar (Joinville a Florianópolis) — mesmo esse trecho sendo menos da metade da extensão total da rodovia no estado.`,
+  `A <strong>densidade de acidentes no corredor é ~6x maior</strong> que no restante da BR-101/SC (${(c.acidentes/cKm).toFixed(1)} vs ${(r.acidentes/rKm).toFixed(1)} acidentes por km em 5 meses), sinal de saturação de tráfego, não apenas de extensão de via.`,
+  `Dois pontos concentram os acidentes dentro do corredor: <strong>km 190–220 (acesso a Florianópolis, via São José/Palhoça)</strong> e <strong>km 110–155 (Itajaí–Balneário Camboriú–Itapema)</strong>, o eixo turístico litorâneo. São José sozinho tem mais acidentes (286) que toda a extensão sul da BR-101/SC.`,
+  `O <strong>perfil horário mostra dois picos claros às 7–8h e 17–19h</strong>, típicos de deslocamento pendular (trabalho/estudo), não só de tráfego turístico de fim de semana — o que reforça a leitura de <strong>congestionamento estrutural</strong>, não apenas sazonalidade de veraneio.`,
+  `<strong>Colisão traseira (401) e colisão lateral no mesmo sentido (324)</strong> são os tipos mais comuns — ambos assinatura clássica de tráfego lento/parado, reforçando a hipótese de que o problema é de <strong>capacidade viária</strong>, e não predominantemente de traçado ou pista simples (82% dos acidentes do corredor já ocorrem em pista dupla ou múltipla).`,
+  `Apesar da alta frequência de acidentes, a <strong>letalidade do corredor é menor que no restante da BR-101/SC</strong> (2,96% dos acidentes têm mortos vs 3,55% no restante), consistente com velocidades mais baixas em trecho congestionado/urbano — 61,8% dos registros do corredor ocorrem em área urbanizada.`,
+  `<strong>Motocicletas são o 2º veículo mais envolvido</strong> (986 ocorrências, atrás só do automóvel com 1.150) — população de risco relevante para qualquer desenho de pedágio, faixas ou capacidade da ViaMar.`,
+];
+const ul = document.getElementById('insights');
+insights.forEach((txt,i)=>{
+  const li = document.createElement('li');
+  li.innerHTML = `<span class="n">${i+1}</span><span>${txt}</span>`;
+  ul.appendChild(li);
+});
+
+// ---- Plan ----
+const plan = [
+  {tag:'Fase 1 · Diagnóstico', title:'Consolidar a linha de base do corredor atual (este relatório)',
+   text:'Fechar o diagnóstico "as is" da BR-101 no trecho Joinville–Florianópolis antes de qualquer comparação com a ViaMar.',
+   items:['Confirmar definição oficial do traçado da ViaMar (municípios, km previstos, pontos de entroncamento com a BR-101/BR-280/SC-401)',
+          'Estender a janela temporal: buscar datatran/acidentes de anos anteriores (2021–2025) no portal de dados abertos da PRF para medir tendência e sazonalidade completa (verão, feriados)',
+          'Recalcular densidade de acidentes por km e por trecho homogêneo (urbano vs rural, pista simples vs duplicada)']},
+  {tag:'Fase 2 · Exposição ao risco', title:'Trazer dado de tráfego (volume), não só acidentes',
+   text:'Acidentes/km não diz se o risco por veículo está subindo ou caindo — falta o denominador: quantos veículos passam por ali.',
+   items:['Contagens volumétricas de tráfego (VDM/VDMA) da concessionária Arteris Litoral Sul, que opera o pedágio da BR-101/SC',
+          'Dados de pedágio (nº de passagens, por categoria de veículo) como proxy de volume histórico',
+          'Calcular taxa de acidentes por veículo-km, não apenas por km de via — isso é o que realmente mede se o corredor está "mais perigoso" ou só "mais cheio"']},
+  {tag:'Fase 3 · Contexto socioeconômico', title:'Entender os motores de demanda do corredor',
+   text:'Joinville (polo industrial) e o eixo Itajaí–Balneário Camboriú (turismo e porto) têm dinâmicas de tráfego diferentes — a ViaMar afeta cada uma de forma distinta.',
+   items:['População e frota de veículos por município (IBGE, DENATRAN/SENATRAN) e sua evolução recente',
+          'Movimentação dos portos de Itajaí, Navegantes e São Francisco do Sul/Itapoá (tráfego de caminhões)',
+          'Sazonalidade turística de Balneário Camboriú/Itapema (ocupação hoteleira, dados de prefeituras/Santur)']},
+  {tag:'Fase 4 · Desenho do comparativo', title:'Modelar o "com ViaMar" vs "sem ViaMar"',
+   text:'Definir o método de estimativa de impacto antes de rodar qualquer número, para evitar viés de confirmação.',
+   items:['Delimitar geograficamente o público afetado: quem tende a migrar da BR-101 para a ViaMar (viagens de passagem/longo curso) vs quem continua na BR-101 (viagens locais/urbanas)',
+          'Estimar redução de volume esperada na BR-101 por segmento (ex.: método de desvio de tráfego / modelo gravitacional simples)',
+          'Projetar efeito esperado sobre acidentes usando elasticidade tráfego-acidentes (referências de literatura de segurança viária, ex. DNIT/IPEA) aplicada aos hotspots identificados (km 110–155 e 190–220)']},
+  {tag:'Fase 5 · Riscos e efeitos colaterais', title:'Não assumir que menos tráfego é só uma boa notícia',
+   text:'Uma via nova desloca risco, não necessariamente o elimina — é preciso avaliar o outro lado do balanço.',
+   items:['Efeito indutor de demanda: novas vias tendem a gerar tráfego adicional em médio prazo (ver estudos de "induced demand")',
+          'Segurança viária no novo traçado da ViaMar (geometria, cruzamentos, ausência de histórico próprio)',
+          'Impacto ambiental/uso do solo ao longo do novo traçado (áreas de mangue/restinga são comuns nesse litoral) e o tempo de licenciamento como variável de cronograma']},
+  {tag:'Fase 6 · Entrega', title:'Consolidar o estudo de impacto e visualizações finais',
+   text:'Fechar em um relatório único, navegável, com cenários e intervalos de incerteza — não um número único.',
+   items:['Construir 2–3 cenários (conservador/base/otimista) para redução de acidentes e tempo de viagem',
+          'Documentar todas as suposições e fontes de dado adicionais usadas, com data de extração',
+          'Revisar com stakeholders (DNIT/DEINFRA, concessionária, prefeituras do corredor) antes de publicar conclusões']},
+];
+const planDiv = document.getElementById('plan');
+plan.forEach(p=>{
+  const div = document.createElement('div'); div.className='step';
+  div.innerHTML = `<span class="tag">${p.tag}</span><h4>${p.title}</h4><p>${p.text}</p><ul>${p.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+  planDiv.appendChild(div);
+});
+</script>
